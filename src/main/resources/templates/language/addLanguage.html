@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>增加试卷</title>
+
+    <link href="../../static/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+    <link href="../../static/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div th:replace="admin/commons :: topnav"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/commons :: leftnav(activeUri='language/addpage')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form class="form-horizontal" method="post" th:action="@{/language/add}">
+                <input type="hidden" name="_method" th:value="put" th:if="${not #strings.isEmpty(lan)}">
+            <input type="hidden" name="_method" th:value="put" th:if="${not #strings.isEmpty(lan)}">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">语言代码</label>
+                    <div class="col-sm-10">
+                        <input type="text" placeholder="代码" name="lanCode" autofocus required
+                        th:value="${lan != null} ? ${lan.lanCode}" th:class="${lan != null} ? 'readonly form-control' : 'form-control' ">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">语言等级</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="等级" name="LanLevel" required
+                        th:value="${lan != null} ? ${lan.lanLevel}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">语言名称</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="名称" name="LanType" required
+                        th:value="${lan != null} ? ${lan.lanType}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">考试时间</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" placeholder="时间" name="LanTime"
+                        th:value="${lan != null} ? ${#dates.format(lan.lanTime,'yyyy-MM-dd')}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="submit" class="btn btn-outline-primary" style="float: right"
+                        th:value="${lan != null} ? '修改' :'增加'">
+                    </div>
+                </div>
+            </form>
+
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="../../static/js/jquery-3.2.1.slim.min.js"
+        th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" src="../../static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="../../static/js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace()
+</script>
+
+<!-- Graphs -->
+<script type="text/javascript" src="../../static/js/Chart.min.js" th:src="@{/js/Chart.min.js}"></script>
+
+
+</body>
+
+</html>

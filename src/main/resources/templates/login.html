@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>登录 界面</title>
+    <!-- Bootstrap core CSS -->
+    <!--th:href="@{/webjars/bootstrap/4.0.0/js/bootstrap.min.js}"-->
+    <link th:href="@{/css/bootstrap.min.css}"
+          rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <style>
+        body {
+            background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+        }
+    </style>
+
+</head>
+
+<body class="text-center">
+<form class="form-signin" th:action="@{/login}" method="post">
+    <img class="mb-4" th:src="@{/img/bootstrap-solid.svg}" alt="" width="72"
+         height="72">
+    <h1 class="h3 mb-3 font-weight-normal" th:text="#{login.tip}">Please sign in</h1>
+    <label class="sr-only" th:text="#{register.phone}">Phone</label>
+    <input type="number" class="form-control" placeholder="phone" th:placeholder="#{register.phone}" name="phone" required
+           autofocus>
+    <label class="sr-only" th:text="#{register.password}">Password</label>
+    <input type="password" class="form-control" placeholder="Password" th:placeholder="#{register.password}"
+           name="password" required style="margin-top: 5%">
+    <div class="checkbox mb-3">
+
+        <p style="color:red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.sign}">Sign in</button>
+    <a class="btn btn-sm" href="toRegister" th:href="@{/toRegister}" th:text="#{register.click}">No Account, click
+        here to register</a>
+    <p class="mb-3 text-muted">© 2017-2018</p>
+    <a class="btn btn-sm" th:href="@{/toLogin(lan='zh_CN')}">中文</a>
+    <a class="btn btn-sm" th:href="@{/toLogin(lan='en_US')}">English</a>
+</form>
+
+</body>
+<script >
+    //防止页面后退
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
+</script>
+</html>

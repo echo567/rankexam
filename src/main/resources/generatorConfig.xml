@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="application.yml"></properties>
+    <!-- mysql驱动的位置 这个是MySQL连接的jar包，你需要指定你自己计算机上的jar包的位置-->
+    <classPathEntry location="D:\Maven_Warehouse\mysql\mysql-connector-java\5.1.47\mysql-connector-java-5.1.47.jar"/>
+
+    <context id="Tables" targetRuntime="MyBatis3">
+        <!-- 生成 JavaBean 对象重写 toString方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+
+        <!-- 取消生成注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--jdbc连接配置-->
+<!--                <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                                connectionURL="${spring.datasource.url}"
+                                userId="${spring.datasource.username}"
+                                password="${spring.datasource.password}">
+                </jdbcConnection>-->
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/cre?serverTimezone=GMT"
+                        userId="root"
+                        password="root">
+        </jdbcConnection>
+
+
+        <!--指定javaBean生成的位置 -->
+        <javaModelGenerator
+                targetPackage="cn.junhui.springboot.bean" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="false"/>
+        </javaModelGenerator>
+
+        <!--配置生成的实体包
+            targetPackage：生成的实体包位置，默认存放在src目录下
+            targetProject：目标工程名
+         -->
+        <!-- 指定sql映射文件生成位置 -->
+<!--        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>-->
+
+        <!-- 指定dao接口生成的位置，mapper接口 -->
+        <!--        <javaClientGenerator type="XMLMAPPER"
+                                     targetPackage="cn.junhui.springboot.dao" targetProject="./src/main/java">
+                    <property name="enableSubPackages" value="false"/>
+                </javaClientGenerator>-->
+
+        <!-- 制定每个表的生成策略 -->
+        <table tableName="tb_exampaper" domainObjectName="ExamPaper"></table>
+       <!-- <table tableName="tb_grade" domainObjectName="Grade"></table>-->
+        <table tableName="tb_language" domainObjectName="Language"></table>
+       <!-- <table tableName="tb_official" domainObjectName="Official"></table>-->
+        <table tableName="tb_user" domainObjectName="User"></table>
+    </context>
+</generatorConfiguration>

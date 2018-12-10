@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>增加试题</title>
+
+    <link href="../../static/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+    <link href="../../static/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div th:replace="admin/commons :: topnav"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/commons :: leftnav(activeUri='items/add')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form class="form-horizontal" style=" width:1000px;" th:action="@{/items/add}" method="post">
+                <input type="hidden" name="_method" value="put" th:if="${not #strings.isEmpty(items)}"/>
+                <input type="hidden" name="paperId" th:value="${items != null} ? ${items.paperId}"
+                       th:if="${not #strings.isEmpty(items)}">
+                <input type="hidden" name="themeId" th:value="${items != null} ? ${items.themeId}"
+                       th:if="${not #strings.isEmpty(items)}">
+
+
+                <div class="form-group" th:if="${not #strings.isEmpty(paper)}">
+                    <label class="col-sm-2 control-label">试卷代码</label>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" th:value="${paper.paperId}" name="paperId" readonly>
+                    </div>
+                </div>
+                <div class="form-group" th:if="${not #strings.isEmpty(paper)}"
+                     style="margin-left: 200px; margin-top: -84px;">
+                    <label class="col-sm-3 control-label">试卷名称</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" th:value="${paper.paperName}" readonly>
+                    </div>
+                </div>
+                <div class="form-group" th:if="${not #strings.isEmpty(paper)}"
+                     style="margin-left: 500px; margin-top: -84px;">
+                    <label class="col-sm-3 control-label">试题编号</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="试题编号" name="themeId">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">题干</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="题干" autofocus name="theme"
+                               th:value="${items != null} ? ${items.theme}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">选项A</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" placeholder="A" name="op1"
+                               th:value="${items != null} ? ${items.op1}">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-left: 500px; margin-top: -84px;">
+                    <label class="col-sm-2 control-label">选项B</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="B" name="op2"
+                               th:value="${items != null} ? ${items.op2}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">选项C</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" placeholder="C" name="op3"
+                               th:value="${items != null} ? ${items.op3}">
+
+                    </div>
+                </div>
+                <div class="form-group" style="margin-left: 500px; margin-top: -84px;">
+                    <label class="col-sm-2 control-label">选项D</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="D" name="op4"
+                               th:value="${items != null} ? ${items.op4}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">正确选项</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" placeholder="正确选项" name="correct"
+                               th:value="${items != null} ? ${items.getCorrect()}" th:if="${not #strings.isEmpty(items)}">
+                        <select name="correct" class="form-control" th:if="${not #strings.isEmpty(paper)}">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-left: 500px; margin-top: -84px;">
+                    <label class="col-sm-2 control-label">分值</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="分值" name="score"
+                               th:value="${items != null} ? ${items.score}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">备注</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="选填" name="note"
+                               th:value="${items != null} ? ${items.note}">
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary" type="submit" style="float: right; margin-right: 180px;"
+                        th:text="${items != null} ? '修改':'增加'">
+                </button>
+
+
+            </form>
+
+
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="../../static/js/jquery-3.2.1.slim.min.js"
+        th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" src="../../static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="../../static/js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace()
+</script>
+
+<!-- Graphs -->
+<script type="text/javascript" src="../../static/js/Chart.min.js" th:src="@{/js/Chart.min.js}"></script>
+
+
+</body>
+
+</html>
+

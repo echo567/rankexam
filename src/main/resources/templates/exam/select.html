@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>选择测试类型</title>
+    <link href="../../static/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+    <link href="../../static/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div th:replace="admin/commons :: topnav"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/commons :: leftnav(activeUri='exam/selectpage')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+            <form class="form-horizontal" th:action="@{/exam/select}">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">语言等级类型</label>
+                    <div class="col-sm-5">
+                        <!-- th:value="${lan.lanCode}"-->
+                        <select class="form-control" name="paperCode">
+                            <option th:each="lan:${language}" th:value="${lan.lanCode}">
+                                [[${lan.lanType}]]
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary" type="submit" style="margin-left: 400px;">查询</button>
+            </form>
+            <p th:if="${msg != null}" th:text="${msg }"></p>
+
+            <table class="table table-striped table-sm" th:if="${not #strings.isEmpty(paper)}">
+                <thead>
+                <tr>
+                    <th>试卷编号</th>
+                    <th>试卷名称</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+
+                <tr th:each="paper:${paper}">
+                    <td th:text="${paper.paperId}"></td>
+                    <td th:text="${paper.paperName}"></td>
+                    <td th:text="${#dates.format(paper.createTime,'yyyy-MM-dd')}"></td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" th:href="@{/exam/delete/}+${paper.paperId}">
+                            清空试卷试题
+                        </a>
+
+                    </td>
+                </tr>
+
+                <p style="color: red">此删除是指删除试卷的所有试题(并不会删除试卷信息)</p>
+                </tbody>
+            </table>
+
+        </main>
+
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="../../static/js/jquery-3.2.1.slim.min.js"
+        th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" src="../../static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="../../static/js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace();
+    $().ready()
+    {
+
+    }
+</script>
+
+<!-- Graphs -->
+<script type="text/javascript" src="../../static/js/Chart.min.js" th:src="@{/js/Chart.min.js}"></script>
+
+
+</body>
+
+</html>

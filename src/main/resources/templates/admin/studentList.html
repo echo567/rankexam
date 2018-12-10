@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <title>考生列表</title>
+    <!-- Bootstrap core CSS
+    webjars\bootstrap\4.0.0\css\bootstrap.min.css-->
+    <link href="../../static/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="admin/commons :: topnav"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/commons :: leftnav(activeUri='stuList')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <a class="btn  btn-success" style="float: left" th:href="@{/toAddStu}">增加考生</a>
+            <h2 style="margin-left: 35%">考生列表</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>注册id</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>地址</th>
+                        <th>手机号</th>
+                        <th>生日</th>
+                        <th>注册时间</th>
+                        <th>修改时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--遍历students,取出的值的名字为stu-->
+                    <tr th:each="stu:${students}">
+                        <td th:text="${stu.registerId}"></td>
+                        <td>[[${stu.name}]]</td>
+                        <td th:text="${stu.sex}"></td>
+                        <td th:text="${stu.address}"></td>
+                        <td th:text="${stu.phone}"></td>
+                        <td th:text="${#dates.format(stu.birth,'yyyy-MM-dd')}"></td>
+                        <td th:text="${#dates.format(stu.createTime,'yyyy-MM-dd')}"></td>
+                        <td th:text="${#dates.format(stu.updateTime,'yyyy-MM-dd')}"></td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" th:href="@{/updStu/} + ${stu.registerId}">编辑
+                            </a>
+                            <button th:attr="del_uri=@{/delStu/}+${stu.registerId}"
+                                    class="btn btn-sm btn-danger deleteBtn">删除
+                            </button>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!-- 分页信息 -->
+            <div th:replace="admin/commons :: pagehelper"></div>
+
+        </main>
+        <form id="deleteEmpForm" method="post">
+            <input name="_method" value="delete" type="hidden">
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="../../static/js/jquery-3.2.1.slim.min.js"
+        th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" src="../../static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="../../static/js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace();
+    $(".deleteBtn").click(function () {
+        $("#deleteEmpForm").attr("action", $(this).attr("del_uri")).submit();
+        return false;
+    });
+</script>
+
+<!-- Graphs -->
+<script type="text/javascript" src="../../static/js/Chart.min.js" th:src="@{/js/Chart.min.js}"></script>
+
+
+</body>
+
+</html>

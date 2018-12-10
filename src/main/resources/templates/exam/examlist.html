@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>考试测试</title>
+    <link href="../../static/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+    <link href="../../static/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+
+</head>
+
+<body onload="leftTimer()">
+
+<!--<div th:replace="admin/commons :: topnav"></div>-->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--   <div th:replace="/admin/commons :: leftnav(activeUri='exam/list')"></div>-->
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <h2 >[[${paper.paperName}]]</h2>
+            <div style="margin-left:800px;margin-top: -50px;position: fixed">
+                <h3>剩余时间:</h3>
+                <div id="timer"></div>
+            </div>
+            <form class="form-horizontal" method="post" th:action="@{/answer}">
+                <input type="hidden" name="userId" th:value="${userId}">
+                <input type="hidden" name="paperId" th:value="${paper.paperId}">
+                <div class="form-group" th:each="item:${items}" th:class="item">
+                    <h5 class="col-sm-8 control-label">[[${item.themeId}]]、[[${item.theme}]]</h5>
+                    <div class="radio">
+                        <!-- <label>-->
+                        <input type="radio" th:name="'op'+${item.themeId}" th:value="A">
+                        A:[[${item.op1}]]
+                        <br>
+                        <input type="radio" th:name="'op'+${item.themeId}" th:value="B">
+                        B:[[${item.op2}]]
+                        <br>
+                        <input type="radio" th:name="'op'+${item.themeId}" th:value="C">
+                        C:[[${item.op3}]]
+                        <br>
+                        <input type="radio" th:name="'op'+${item.themeId}" th:value="D">
+                        D:[[${item.op4}]]
+                        <!--  </label>-->
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-info">提交</button>
+            </form>
+
+
+        </main>
+    </div>
+
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="../../static/js/jquery-3.2.1.slim.min.js"
+        th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" src="../../static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="../../static/js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace();
+
+    function leftTimer(year, month, day, hour, minute, second) {
+        var leftTime = (new Date(year, month - 1, day, hour, minute, second)) - (new Date()); //计算剩余的毫秒数
+        var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10); //计算剩余的天数
+        var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10); //计算剩余的小时
+        var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);//计算剩余的分钟
+        var seconds = parseInt(leftTime / 1000 % 60, 10);//计算剩余的秒数
+        days = checkTime(days);
+        hours = checkTime(hours);
+        minutes = checkTime(minutes);
+        seconds = checkTime(seconds);
+
+        setInterval("leftTimer(2018,12,28,12,0,0)", 1000);
+        document.getElementById("timer").innerHTML = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
+    }
+
+    function checkTime(i) { //将0-9的数字前面加上0，例1变为01
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+    //防止页面后退
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
+    // 初始化操作
+    $(document).ready(function () {
+        // 浏览器后退按钮及鼠标右键回退按钮禁用
+        // noBack();
+        // 禁止右键刷新
+        document.oncontextmenu = function () {
+            return false;
+        };
+        // 禁止浏览器刷新
+        window.onbeforeunload = function () {
+            // window.event.returnValue='确认真的要刷新？';
+            // alert("本系统禁止刷新");
+            return false;
+        };
+    });
+
+
+    // 浏览器回退禁止
+    function noBack() {
+        // 历史记录栈中记录页数
+        var numberOfEntries = window.history.length;
+        if (window.history && window.history.pushState) {
+            $(window).on('popstate', function () {
+                // 当点击浏览器的 后退和前进按钮 时才会被触发，
+                window.history.pushState('forward', null, '');
+                window.history.forward(1);
+            });
+        }
+        // 新弹出页对应
+        if (numberOfEntries != 1) {
+            // 页面间跳转用
+            window.history.pushState('forward', null, '');
+            window.history.forward(1);
+        }
+    };
+
+    document.oncontextmenu = function () {
+        return false
+    };//禁止右键刷新
+</script>
+
+<!-- Graphs -->
+<script type="text/javascript" src="../../static/js/Chart.min.js" th:src="@{/js/Chart.min.js}"></script>
+
+
+</body>
+
+</html>

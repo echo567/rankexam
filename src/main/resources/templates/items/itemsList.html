@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>试题列表</title>
+    <link href="../../static/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+    <link href="../../static/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div th:replace="admin/commons :: topnav"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/commons :: leftnav(activeUri='items/list')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <h2 style="margin-left: 35%">试题列表</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>试卷ID</th>
+                        <th>题目ID</th>
+                        <th>题目</th>
+                        <th>选项A</th>
+                        <th>选项B</th>
+                        <th>选项C</th>
+                        <th>选项D</th>
+                        <th>正确选项</th>
+                        <th>分值</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
+                        <th>操作</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--遍历items,取出的值的名字为it-->
+                    <tr th:each="it:${items}">
+                        <td th:text="${it.paperId}"></td>
+                        <td>[[${it.themeId}]]</td>
+                        <td th:text="${it.theme}"></td>
+                        <td th:text="${it.op1}"></td>
+                        <td th:text="${it.op2}"></td>
+
+                        <td th:text="${it.op3}"></td>
+                        <td th:text="${it.op4}"></td>
+                        <!--   <td th:text="${it.}"></td>-->
+                        <td th:text="${it.correct}"></td>
+                        <td th:text="${it.score}"></td>
+
+                        <td th:text="${#dates.format(it.createTime,'yyyy-MM-dd')}"></td>
+                        <td th:text="${#dates.format(it.updateTime,'yyyy-MM-dd')}"></td>
+                        <td>
+                            <a class="btn btn-sm btn-primary"
+                               th:href="@{/items/edit(paperId=${it.paperId},themeId=${it.themeId})}">编辑
+                            </a>
+                            <button th:attr="del_uri=@{/items/delete(paperId=${it.paperId},themeId=${it.themeId})}"
+                                    class="btn btn-sm btn-danger deleteBtn">
+                                删除
+                            </button>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <!--分页-->
+            <div th:replace="admin/commons :: pagehelper"></div>
+        </main>
+        <form id="deleteEmpForm" method="post">
+            <input name="_method" value="delete" type="hidden">
+        </form>
+    </div>
+</div>
+
+<!-- 信息删除确认 模态框-->
+<!--
+<div class="modal fade" id="delcfmModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">提示信息</h4>
+            </div>
+            <div class="modal-body">
+                <p>您确认要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="url"/>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <a onclick="urlSubmit()" class="btn btn-success" data-dismiss="modal">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="../../static/js/jquery-3.2.1.slim.min.js"
+        th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" src="../../static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="../../static/js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace();
+    $(".deleteBtn").click(function () {
+        $("#deleteEmpForm").attr("action", $(this).attr("del_uri")).submit();
+        return false;
+    });
+
+
+</script>
+
+<!-- Graphs -->
+<script type="text/javascript" src="../../static/js/Chart.min.js" th:src="@{/js/Chart.min.js}"></script>
+
+
+</body>
+
+</html>

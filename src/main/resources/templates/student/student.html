@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>学生页面</title>
+
+    <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/css/resume.css}" rel="stylesheet">
+    <style>
+        .container-fluid {
+
+        }
+
+    </style>
+</head>
+
+<body id="page-top">
+
+<!--路径必须是以templates开始的绝对路径-->
+<div th:replace="student/commons :: left_nav"></div>
+
+<!--欢迎界面-->
+<div class="container-fluid p-0">
+    <section class="resume-section p-3 p-lg-5 d-flex d-column">
+
+        <div class="my-auto">
+
+            <h3 class="mb-5">欢迎
+                <span class="text-primary">[[${user.name}]]</span>
+                同学使用计算机等级考试系统
+            </h3>
+
+            <p class="lead">
+                一、 项目介绍: <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;全国计算机等级考试（National Computer Rank Examination，简称NCRE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是经原国家教育委员会（现教育部）批准，由教育部考试中心主办，面向社会，用于考查应试人员计算机应用知识与技能的全国性计算机水平考试体系。
+
+            </p>
+            <p class="lead mb-5">
+                二、 举办NCRE的目的: <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计算机技术的应用在我国各个领域发展迅速，为了适应知识经济和信息社会发展的需要，操作和应用计算机已成为人们必须掌握的一种基本技能。许多单位、部门已把掌握一定的计算机知识和应用技能作为人员聘用、职务晋升、职称评定、上岗资格的重要依据之一。<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;鉴于社会的客观需求，经原国家教委批准，原国家教委考试中心于1994年面向社会推出了NCRE，其目的在于以考促学，向社会推广和普及计算机知识，也为用人部门录用和考核工作人员时提供一个统一、客观、公正的标准。
+            </p>
+
+
+        </div>
+    </section>
+</div>
+
+<!--个人资料-->
+<div class="container-fluid p-0">
+    <hr class="m-0">
+    <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="personal">
+        <div class="my-auto">
+            <h3>个人资料</h3>
+            <div class="form-horizontal" style="margin-left: 150px; margin-top: 50px;">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-primary">姓名:</label>
+                    <span class="col-sm-6" th:text="${user.name}">
+
+                </span>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-primary">性别:</label>
+                    <span class="col-sm-10" th:text="${user.sex}">
+
+                </span>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-primary">民族:</label>
+                    <span class="col-sm-10" th:text="${user.national}">
+                </span>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-primary">生日:</label>
+                    <span class="col-sm-10" th:text="${#dates.format(user.birth,'yyyy-MM-dd')}">
+                </span>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-primary">地址:</label>
+                    <span class="col-sm-10" th:text="${user.address}">
+                </span>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-primary">身份证号:</label>
+                    <span class="col-sm-10" th:text="${user.idCard}">
+                </span>
+                </div>
+                <button class="btn btn-outline-info" style="float: right; margin-right: 200px;"
+                        data-toggle="modal" data-target="#personal_modal">
+                    修改个人资料
+                </button>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+<!--考试报名-->
+<div class="container-fluid p-0">
+    <hr class="m-0">
+    <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="signUp">
+        <div class="my-auto">
+            <h3>报名考试</h3>
+            <div>
+                <p class="text-danger">报名注意事项：</p>
+                <p style="color: red">考生每次报名只能报考一场考试,成功报名后，且不准修改!</p>
+                <p>由于试卷资源紧张，只有二级的语言考试存在试卷，不对，二级web程序设计也没有试卷</p>
+                <p>如果选择了没有试卷的语言，那么将会从所有试卷中随机抽取一张进行考试！</p>
+            </div>
+            <table class="table table-striped">
+                <tr th:class="text-primary">
+                    <td>考试等级</td>
+                    <td>考试名称</td>
+                    <td>考试时间</td>
+                    <td th:if="${#strings.isEmpty(language)}">报名选项</td>
+                </tr>
+                <!--报名之后，仅显示所报考语言的信息-->
+                <tr th:if="${not #strings.isEmpty(language)}">
+                    <td th:text="${language.lanLevel}"></td>
+                    <td th:text="${language.lanType}"></td>
+                    <td th:text="${#dates.format(language.lanTime,'yyyy-MM-dd')}"></td>
+
+                </tr>
+
+                <!--没报名之前显示语言信息-->
+                <tr th:each="lan:${languages}" th:if="${user.examCode == null}">
+                    <td th:text="${lan.lanLevel}"></td>
+                    <td th:text="${lan.lanType}"></td>
+                    <td th:text="${#dates.format(lan.lanTime,'yyyy-MM-dd')}"></td>
+                    <td>
+                        <button th:value="${lan.lanCode}" th:href="@{/signup(lanCode=${lan.lanCode})}"
+                                class="btn-sm btn-primary but"
+                                data-toggle="modal" data-target="#signup_modal">
+                            报名
+                        </button>
+                    </td>
+                </tr>
+
+            </table>
+
+            <form id="putForm" method="post">
+                <input name="_method" value="put" type="hidden">
+            </form>
+
+        </div>
+    </section>
+</div>
+
+<!--考试系统-->
+<div class="container-fluid p-0">
+    <hr class="m-0">
+    <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="exam">
+        <div class="my-auto">
+            <h3>考试系统</h3>
+            <div>
+                <p class="text-danger">考试说明:</p>
+                <ol>
+                    <li>进入考试系统页面，禁用了后退和刷新功能</li>
+                    <li>点击提交试卷之后，即跳转到登录界面</li>
+                </ol>
+            </div>
+            <p th:if="${#strings.isEmpty(user.examCode)}">请先选择考试报名</p>
+            <div th:if="${#strings.isEmpty(user.note)} and ${not #strings.isEmpty(user.examCode)}">
+
+                <a class="btn btn-outline-info btn-block" th:href="@{/exam}">
+                    点击进入考试系统</a>
+
+            </div>
+
+
+            <p th:if="${not #strings.isEmpty(user.note)} and ${not #strings.isEmpty(user.examCode)}">
+                你已经参加过考试了，请静待成绩发布！</p>
+
+        </div>
+    </section>
+</div>
+
+<!--成绩查询-->
+<div class="container-fluid p-0">
+    <hr class="m-0">
+    <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="results">
+        <div class="my-auto">
+            <h3>成绩查询</h3>
+            <p th:if="${#strings.isEmpty(user.examCode)}">请先选择考试报名</p>
+            <p th:href="@{/grade}" th:if="${user.note == null} and ${not #strings.isEmpty(user.examCode)}">
+                请先进行考试，再来查看成绩</p>
+            <a th:href="@{/grade}"
+               th:if="${user.note != null} and ${not #strings.isEmpty(user.examCode)} and ${user.grade == null}">点击查看成绩</a>
+            <p th:if="${user.grade != null}">你的成绩为：
+            <p></p>
+            </p>
+            <h2 th:text="${user.grade}"></h2>
+            <p class="text-danger"> 成绩说明:</p>
+            <ol>
+                <li>NCRE考试实行百分制计分，但以等第通知考生成绩。等第共分优秀、良好、及格、不及格四等。90－100分为优秀、80－89分为良好、60－79分为及格、0－59分为不及格。</li>
+                <li>
+                    成绩在及格以上者，由教育部考试中心颁发合格证书。成绩优秀者，合格证书上会注明优秀字样；成绩良好的，合格证书上会注明良好字样。对四级科目，只有所含两门课程分别达到30分，该科才算合格。
+                </li>
+                <li>
+                    一般在考后 30 个工作日内由教育部考试中心将成绩处理结果下发给各省级承办机构。考后 50
+                    个工作日，考生可登录 <a href="http://chaxun.neea.edu.cn/" th:target="_blank">教育部考试中心综合查询网</a>进行成绩查询。部分省市如江苏、黑龙江等也可通过省市考试院或者人事考
+                    试中心进行查询
+                </li>
+                <li>
+                    考生对成绩若有疑义，应在省级承办机构下发成绩后 5 个工作日内，向所在考点提出书面申请。考点按省级承办机构的要求统一上报。
+                </li>
+            </ol>
+
+
+        </div>
+    </section>
+</div>
+
+<!--账号资料-->
+<div class="container-fluid p-0">
+    <hr class="m-0">
+    <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="account">
+        <div class="my-auto">
+            <h3>账号 &amp; 设置</h3>
+            <div class="form-horizontal" style="margin-left: 150px; margin-top: 50px;">
+
+                <div class="form-group">
+                    <label class="control-label col-sm-4 text-primary">姓名:</label>
+                    <span class="" style="display: inline;margin-left: -150px;" th:text="${user.name}">
+                  <!--  <input type="text" class="form-control col-sm-6" style="display: inline" name="name"
+                                   required th:value="${user.name}">-->
+                        <!-- <p th:text="${user.name}"></p>-->
+                </span>
+                </div>
+                <button class="btn-outline-info btn btn-sm" data-toggle="modal" data-target="#account_modal">
+                    点击修改
+                </button>
+
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<!--个人资料模态框-->
+<div class="modal fade bs-example-modal-lg" id="personal_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+                <h4 class="modal-title">[[${user.name}]] 个人资料</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+                <form method="post" th:action="@{/user}">
+                    <input type="hidden" name="_method" value="put">
+                    <input type="hidden" name="registerId" th:value="${user.registerId}">
+                    <!--<input type="hidden" id="href" th:if="${not #strings.isEmpty(href_personal)}" th:value="${href_personal}">-->
+                    <div class="form-group">
+                        <label class=" control-label col-sm-4 text-primary">姓名:</label>
+                        <span>
+                            <input type="text" class="form-control col-sm-6" style="display: inline" name="name"
+                                   required th:value="${user.name}">
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 text-primary">性别:</label>
+                        <span>
+                            <select class="form-control col-sm-6 " style="display: inline" name="sex">
+
+                                <option value="男"
+                                        th:selected="${user.sex eq '男'} ? 'selected'">男
+                                </option>
+                                <option value="女"
+                                        th:selected="${user.sex eq '女'} ? 'selected'">女
+                                </option>
+                            </select>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 text-primary">民族:</label>
+                        <span>
+                            <input type="text" class="form-control col-sm-6" style="display: inline" name="national"
+                                   th:value="${user.national}">
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class=" control-label col-sm-4 text-primary">生日:</label>
+                        <span>
+                            <input type="date" class="form-control col-sm-6" style="display: inline" name="birth"
+                                   th:value="${#dates.format(user.birth,'yyyy-MM-dd')}">
+
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 text-primary">地址:</label>
+                        <span>
+                            <input type="text" class="form-control col-sm-6" style="display: inline" name="address"
+                                   th:value="${user.address}">
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class=" control-label col-sm-4 text-primary">身份证号:</label>
+                        <span>
+                            <input type="text" class="form-control col-sm-6" style="display: inline" name="idCard"
+                                   th:value=" ${user.idCard}">
+                        </span>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary "
+                            th:text="修改">
+                    </button>
+                </form>
+
+
+            </div>
+            <!-- 模态框底部 -->
+            <!-- <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                 <a th:href="@{/}" class="btn btn-primary">确认</a>
+             </div>-->
+        </div>
+    </div>
+</div>
+<!--报名考试模态框-->
+<div class="modal fade" id="signup_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+                <!--<h4 class="modal-title">确定报考此科目？</h4>-->
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+                确定报考此科目？
+            </div>
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+                <input type="hidden" id="examCode" name="examCode" value="">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary" id="button_signup">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--账号设置模态框-->
+<div class="modal fade bs-example-modal-lg" id="account_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+                <h4 class="modal-title">[[${user.name}]]账号资料</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+                <form method="post" th:action="@{/account}">
+                    <input type="hidden" name="_method" value="put">
+                    <input type="hidden" name="registerId" th:value="${user.registerId}">
+                    <div class="form-group">
+                        <label class=" control-label col-sm-4 text-primary">姓名:</label>
+                        <span>
+                            <input type="text" class="form-control col-sm-6" style="display: inline" name="name"
+                                   required th:value="${user.name}">
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 text-primary">密码:</label>
+                        <span>
+                            <input type="password" class="form-control col-sm-6" style="display: inline" name="password"
+                                   required
+                            >
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 text-primary"></label>
+                        <span>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="submit" class="btn btn-primary" style="margin-left: 110px;"
+                                    th:text="修改">
+                            </button>
+                        </span>
+                    </div>
+
+
+                </form>
+
+
+            </div>
+            <!-- 模态框底部 -->
+            <!-- <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                 <a th:href="@{/}" class="btn btn-primary">确认</a>
+             </div>-->
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+<!-- Bootstrap core JavaScript -->
+<!--\webjars\jquery\3.3.1-1\jquery.min.js-->
+<script src="../../static/js/jquery.min.js" th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+<!--webjars\bootstrap\4.0.0\js\bootstrap.bundle.min.js-->
+<script th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.bundle.min.js}"></script>
+<!-- Plugin JavaScript -->
+<script src="../../static/js/jquery.easing.min.js" th:src="@{/js/jquery.easing.min.js}"></script>
+<!-- Custom scripts for this template -->
+<script src="../../static/js/resume.min.js" th:src="@{/js/resume.min.js}"></script>
+
+<script>
+    var att;
+    $(".but").click(function () { // 在页面任意位置点击而触发此事件
+        att = $(this).attr("href");
+        console.log($(this).attr("href"));     // e.target表示被点击的目标
+    })
+    $("#button_signup").click(function () {
+        console.log("att:" + att);
+
+        $.ajax({
+            type: "get",
+            url: att,
+            dataType: 'html',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result) {
+
+                location.replace(att);
+
+            }
+        });
+    })
+</script>
+</body>
+
+</html>

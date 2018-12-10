@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员公共模板</title>
+</head>
+<body>
+
+<!--顶部导航栏-->
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0" th:fragment="topnav">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">计算机等级考试系统</a>
+    <!--<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">-->
+    <span class="form-control form-control-dark w-100">后台管理界面 </span>
+    <!--    <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">Sign out</a>
+            </li>
+        </ul>-->
+</nav>
+
+<!--侧边导航栏-->
+<nav class="col-md-2 d-none d-md-block bg-light sidebar" th:fragment="leftnav">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" th:href="@{/admin}"
+                   th:class="${activeUri == 'root'?'nav-link active':'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-home">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    主页 <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/items/list}"
+                   th:class="${activeUri =='items/list' ? 'nav-link active' : 'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-file">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                        <polyline points="13 2 13 9 20 9"></polyline>
+                    </svg>
+                    试题管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/stuList}"
+                   th:class="${activeUri == 'stuList'?'nav-link active':'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-users">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    考生管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/selstu}"
+                   th:class="${activeUri=='selstu'?'active nav-link':'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-file-text">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    查询考生
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/paper/list}"
+                   th:class="${activeUri == 'paper/list'?'active nav-link':'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-layers">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+
+                    试卷管理
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a th:href="@{/paper/addPage}"
+                   th:class="${activeUri =='paper/addPage'?'nav-link active':'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-file">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                        <polyline points="13 2 13 9 20 9"></polyline>
+                    </svg>
+                    增加试卷
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a th:href="@{/language/list}"
+                   th:class="${activeUri =='language/list'?'nav-link active':'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-bar-chart-2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    语言管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/language/addpage}"
+                   th:class="${activeUri == 'language/addpage'?'nav-link active':'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-file">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                        <polyline points="13 2 13 9 20 9"></polyline>
+                    </svg>
+                    增加语言
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/exam/selectpage}"
+                   th:class="${activeUri == 'exam/selectpage' ? 'active nav-link' :'nav-link'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-file">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                        <polyline points="13 2 13 9 20 9"></polyline>
+                    </svg>
+                    查询各等级试卷
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-file">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                        <polyline points="13 2 13 9 20 9"></polyline>
+                    </svg>
+                    退出登录
+                </a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+<!-- 分页信息-不带paperId -->
+<div class="row" th:fragment="pagehelper">
+    <div class="col-md-8">
+        <h5>当前第 [[${pageInfo.pageNum }]] 页,总 [[${pageInfo.pages }]] 页,总 [[${pageInfo.total }]] 条记录
+        </h5>
+    </div>
+
+    <div class="col-md-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <!--首页 和 上一页-->
+                <li>
+                    <!--href="/?/paper/list"-->
+                    <a th:href="@{(${link})}" class="btn btn-sm">
+                        首页
+                    </a>
+                </li>
+
+                <th:if test="${pageInfo.hasPreviousPage - 1} > 0">
+                    <li>
+                        <a th:href="@{(${link})(pn=${pageInfo.pageNum - 1})}"
+                           aria-label="Previous" class="btn btn-sm"
+                           data-th-classappend="${(pageInfo.pageNum - 1) eq 0} ? 'disabled' : ''">
+                            <
+                        </a>
+
+                    </li>
+                </th:if>
+
+                <!--迭代生成页码-->
+                <li>
+
+                    <a th:each="i:${pageInfo.navigatepageNums}"
+                       th:href="@{(${link})(pn=${i})}"
+                       th:text="${i}" class="btn btn-sm"
+                       data-th-classappend="${(pageInfo.pageNum) eq i} ? 'btn-info' : ''">
+                    </a>
+
+                </li>
+
+                <!--下一页 和 末页-->
+                <th:if test="${pageInfo.hasNextPage }">
+                    <li>
+
+                        <a aria-label="Next" class="btn btn-sm"
+                           th:href="@{(${link})(pn=${pageInfo.pageNum + 1})}"
+                           data-th-classappend="${(pageInfo.pageNum) eq (pageInfo.pages)} ? 'disabled' : ''">
+                            >
+                        </a>
+
+                    </li>
+                </th:if>
+
+                <li>
+
+                    <a th:href="@{(${link})(pn=${pageInfo.pages})}" class="btn btn-sm">
+                        末页
+                    </a>
+
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+
+<!-- 分页信息-paperId -->
+<div class="row" th:fragment="pagehelper_paperId">
+    <div class="col-md-8">
+        <h5>当前第 [[${pageInfo.pageNum }]] 页,总 [[${pageInfo.pages }]] 页,总 [[${pageInfo.total }]] 条记录
+        </h5>
+    </div>
+
+    <div class="col-md-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <!--首页 和 上一页-->
+                <li>
+
+                    <a th:href="@{(${link})(paperId=${paperId})}" class="btn btn-sm">
+                        首页
+                    </a>
+                </li>
+
+                <th:if test="${pageInfo.hasPreviousPage - 1} > 0">
+                    <li>
+                        <a th:href="@{(${link})(paperId=${paperId},pn=${pageInfo.pageNum - 1})}"
+                           aria-label="Previous" class="btn btn-sm"
+                           data-th-classappend="${(pageInfo.pageNum - 1) eq 0} ? 'disabled' : ''">
+                            <
+                        </a>
+
+                    </li>
+                </th:if>
+
+                <!--迭代生成页码-->
+                <li>
+
+                    <a th:each="i:${pageInfo.navigatepageNums}"
+                       th:href="@{(${link})(paperId=${paperId},pn=${i})}"
+                       th:text="${i}" class="btn btn-sm"
+                       data-th-classappend="${(pageInfo.pageNum) eq i} ? 'btn-info' : ''">
+                    </a>
+
+                </li>
+
+                <!--下一页 和 末页-->
+                <th:if test="${pageInfo.hasNextPage }">
+                    <li>
+
+                        <a aria-label="Next" class="btn btn-sm"
+                           th:href="@{(${link})(paperId=${paperId},pn=${pageInfo.pageNum + 1})}"
+                           data-th-classappend="${(pageInfo.pageNum) eq (pageInfo.pages)} ? 'disabled' : ''">
+                            >
+                        </a>
+
+                    </li>
+                </th:if>
+
+                <li>
+
+                    <a th:href="@{(${link})(paperId=${paperId},pn=${pageInfo.pages})}" class="btn btn-sm">
+                        末页
+                    </a>
+
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+
+</body>
+</html>
