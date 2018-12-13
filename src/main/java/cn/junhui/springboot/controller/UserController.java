@@ -8,6 +8,7 @@ import cn.junhui.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -83,6 +84,8 @@ public class UserController {
             System.out.println("无错");
 
             System.out.println("需要注册的信息：" + user);
+            String md5Password = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+            user.setPassword(md5Password);
             User u = userService.selectByPhone(user.getPhone());
             if (u == null) {
                 System.out.println("账号不重复，可注册");
@@ -112,15 +115,17 @@ public class UserController {
         管理员特定账号
          */
         if (user.getPhone().equals("000") && user.getPassword().equals("root")) {
-            session.setAttribute("loginUser",user);
+            session.setAttribute("loginUser", user);
             return new ModelAndView("redirect:/admin");
         }
 
         User userdatabase = userService.selectByPhone(user.getPhone());
 
+
         if (null == userdatabase) {
             return new ModelAndView("login", "msg", "账号或密码错误");
-        } else if (userdatabase.getPassword().equals(user.getPassword())) {
+
+        } else if (userdatabase.getPassword().equals(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()))) {
             currentUser = userdatabase;
             session.setAttribute("loginUser", userdatabase);
             List<Language> languages = languageService.getall();
