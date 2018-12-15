@@ -11,8 +11,11 @@
     <a class="navbar-brand js-scroll-trigger" href="#page-top">
         <!--  <span class="d-block d-lg-none">Clarence Taylor</span>-->
         <span class="d-none d-lg-block">
-          <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="../../static/img/fei.png"
-               th:src="@{/img/fei.png}" alt="">
+          <img class="img-fluid img-profile rounded-circle mx-auto mb-2"
+               th:src="@{/img/fei.png}" th:if="${user.photo == null}">
+             <img class="img-fluid img-profile rounded-circle mx-auto mb-2"
+                  th:src="@{/image/ } + ${user.photo}" th:if="${user.photo != null}">
+
             <!--获取session：${session.loginUser}-->
             <p th:text="${user.name}"></p>
         </span>
@@ -43,7 +46,6 @@
         </ul>
     </div>
 </nav>
-
 
 
 </body>

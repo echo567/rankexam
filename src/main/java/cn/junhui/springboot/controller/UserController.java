@@ -88,9 +88,11 @@ public class UserController {
         } else {
             System.out.println("无错");
 
-            System.out.println("需要注册的信息：" + user);
+
             String md5Password = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+            user.setPhoto("fei.png");
             user.setPassword(md5Password);
+            System.out.println("需要注册的信息：" + user);
             User u = userService.selectByPhone(user.getPhone());
             if (u == null) {
                 System.out.println("账号不重复，可注册");
@@ -125,12 +127,14 @@ public class UserController {
         }
 
         User userdatabase = userService.selectByPhone(user.getPhone());
-        System.out.println("数据库加密后的密码：" + userdatabase.getPassword());
-        System.out.println("登录时输入的密码:" + user.getPassword() + " " + DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        System.out.println(userdatabase);
         if (null == userdatabase) {
-            return new ModelAndView("login", "msg", "账号或密码错误");
-
+            //账号不存在
+            return new ModelAndView("login", "msg", "账号不存在");
         } else if (userdatabase.getPassword().equals(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()))) {
+            System.out.println("数据库加密后的密码：" + userdatabase.getPassword());
+            System.out.println("登录时输入的密码:" + user.getPassword() + " " + DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+
             currentUser = userdatabase;
             session.setAttribute("loginUser", userdatabase);
             List<Language> languages = languageService.getall();

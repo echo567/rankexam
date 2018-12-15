@@ -222,6 +222,19 @@
             <div class="form-horizontal" style="margin-left: 150px; margin-top: 50px;">
 
                 <div class="form-group">
+                    <label class="control-label text-primary">头像:</label>
+
+                    <img class="img-fluid img-profile rounded-circle mx-auto mb-2"
+                         th:src="@{/img/fei.png}" th:if="${user.photo == null}" style="width: 150px;">
+                    <img class="img-fluid img-profile rounded-circle mx-auto mb-2"
+                         th:src="@{/image/ } + ${user.photo}" th:if="${user.photo != null}" style="width: 150px;">
+
+                    <br>
+                    <!--  <input type="file" name="photo" id="photo">-->
+                    <!--<input id="upload" name="file" accept="image/*" type="file" style="display: none"/>-->
+                    <!--<button id="submit_btn" type="submit">确定修改</button>-->
+                </div>
+                <div class=" form-group">
                     <label class="control-label col-sm-4 text-primary">姓名:</label>
                     <span class="" style="display: inline;margin-left: -150px;" th:text="${user.name}">
                   <!--  <input type="text" class="form-control col-sm-6" style="display: inline" name="name"
@@ -356,22 +369,31 @@
             </div>
             <!-- 模态框主体 -->
             <div class="modal-body">
-                <form method="post" th:action="@{/account}">
-                    <input type="hidden" name="_method" value="put">
+                <form method="post" th:action="@{/account}" enctype="multipart/form-data">
+                    <!-- <input type="hidden" name="_method" value="put">-->
                     <input type="hidden" name="registerId" th:value="${user.registerId}">
+
                     <div class="form-group">
+                        <div class="form-group">
+                            <label class="control-label text-primary">头像:</label>
+                            <img class="img-fluid img-profile rounded-circle mx-auto mb-2"
+                                 th:src="@{/image/ } + ${user.photo}" style="width: 150px;" id="headPic">
+                            <br>
+                            <!--  <input type="file" name="photo" id="photo">-->
+                            <input id="upload" accept="image/*" type="file" th:name="photoFile" style="display: none"/>
+
+                        </div>
                         <label class=" control-label col-sm-4 text-primary">姓名:</label>
                         <span>
                             <input type="text" class="form-control col-sm-6" style="display: inline" name="name"
-                                   required th:value="${user.name}">
+                                   th:value="${user.name}">
                         </span>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-4 text-primary">密码:</label>
                         <span>
                             <input type="password" class="form-control col-sm-6" style="display: inline" name="password"
-                                   required
-                            >
+                                   placeholder="若不修改密码,可不填" th:value="${user.password}">
                         </span>
                     </div>
                     <div class="form-group">
@@ -410,7 +432,52 @@
 <script src="../../static/js/jquery.easing.min.js" th:src="@{/js/jquery.easing.min.js}"></script>
 <!-- Custom scripts for this template -->
 <script src="../../static/js/resume.min.js" th:src="@{/js/resume.min.js}"></script>
+<script>
+    $(function () {
+        //头像预览
+        $("#headPic").click(function () {
+            $("#upload").click(); //隐藏了input:file样式后，点击头像就可以本地上传
+            $("#upload").on("change", function () {
+                var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
+                if (objUrl) {
+                    $("#headPic").attr("src", objUrl); //将图片路径存入src中，显示出图片
+                }
+            });
+        });
 
+        //图片上传
+        $("#submit_btn").click(function () {
+            var imgurl = document.getElementById("upload").value;
+            $.ajax({
+                url: "tophoto" + "?file=",
+                type: "post",
+                fileElementId: "upload", //文件上传域的ID，这里是input的ID，而不是img的
+                dataType: 'json', //返回值类型 一般设置为json
+                contentType: "multipart/form-data",
+                success: function (data) {
+                    alert(data.code + " " + data.msg);
+                    if (data.code == 200) {
+                        $("#headPic").attr("src", "/market/images/image.png");
+                        //将图片换成默认的+图片
+                    }
+                }
+            });
+        });
+    });
+
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+</script>
 <script>
     var att;
     $(".but").click(function () { // 在页面任意位置点击而触发此事件
@@ -426,9 +493,7 @@
             dataType: 'html',
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result) {
-
                 location.replace(att);
-
             }
         });
     })

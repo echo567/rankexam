@@ -2,14 +2,13 @@ package cn.junhui.springboot.service;
 
 import cn.junhui.springboot.bean.Exam;
 import cn.junhui.springboot.bean.Items;
-import cn.junhui.springboot.bean.Paper;
 import cn.junhui.springboot.bean.User;
 import cn.junhui.springboot.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 军辉
@@ -64,13 +63,15 @@ public class UserService {
     public boolean toRegister(User user) {
 
         String current;
-
+        System.out.println("注册时的个人信息：" + user);
+        userMapper.dynamicStuAdd(user);
+        return true;
         // System.out.println("插入时返回的数值:"+userMapper.toRegister(user.getPhone(), user.getName(), user.getPassword()));
-        if (1 == userMapper.toRegister(user.getPhone(), user.getName(), user.getPassword())) {
+     /*   if (1 == userMapper.toRegister(user.getPhone(), user.getName(), user.getPassword())) {
             return true;
         } else {
             return false;
-        }
+        }*/
     }
 
     /*
@@ -114,6 +115,7 @@ public class UserService {
     动态编辑学生
      */
     public void dynamicStyUdp(User user) {
+        //  System.out.println("当前用户密码：" + user.getPassword());
 
         userMapper.dynamicStuUpd(user);
     }
