@@ -1,5 +1,6 @@
 package cn.junhui.springboot.controller;
 
+
 import cn.junhui.springboot.bean.*;
 import cn.junhui.springboot.service.ItemsService;
 import cn.junhui.springboot.service.LanguageService;
@@ -10,10 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -120,8 +125,8 @@ public class UserController {
         }
 
         User userdatabase = userService.selectByPhone(user.getPhone());
-
-
+        System.out.println("数据库加密后的密码：" + userdatabase.getPassword());
+        System.out.println("登录时输入的密码:" + user.getPassword() + " " + DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         if (null == userdatabase) {
             return new ModelAndView("login", "msg", "账号或密码错误");
 
@@ -292,20 +297,76 @@ public class UserController {
     }
 
     /*
+    修改头像
+     */
+    @PostMapping(value = "/tophoto", produces = "application/json; charset=utf-8")
+    public String tophoto(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        System.out.println("修改头像");
+        FileOutputStream out = null;
+        //这里以用户ID作为文件夹
+        int uid = (Integer) request.getSession().getAttribute("userid");
+        //创建一个文件夹，网上代码很多
+        //String url = new FileUtils();
+        //createImageDir(String.valueOf(uid));
+        String url = "photo";
+        try {
+            //获得二进制流并输出
+            byte[] f = file.getBytes();
+            out = new FileOutputStream(url + file.getOriginalFilename());
+            out.write(f);
+
+        } catch (IOException e) {
+            System.out.println("上传失败");
+
+        } finally {
+            // 完毕，关闭所有链接
+            try {
+                out.close();
+            } catch (IOException e) {
+                System.out.println("关闭流失败");
+            }
+        }
+        return null;
+    }
+
+    /*
     修改账号资料
      */
-    @PutMapping("/account")
-    public ModelAndView updateAccount(User user) {
+    @PostMapping("/account")
+    public ModelAndView updateAccount(User user, MultipartFile photoFile) {
         User u = findbyid(user.getRegisterId());
+        System.out.println(photoFile);
+        if (photoFile != null) {
+            String path = "D:\\photo\\" + photoFile.getOriginalFilename();
 
-        System.out.println("需要修改的：" + user + " 原本的：" + u);
-        if (u != null) {
-            user.setUpdateTime(new Date());
-            userService.dynamicStyUdp(user);
-
+            //System.out.println("photo: " + photoFile.getOriginalFilename());
+            user.setPhoto(photoFile.getOriginalFilename());
+            File file = new File(path);
+            try {
+                photoFile.transferTo(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        System.out.println("需要修改的：" + user);
+        System.out.println(" 原本的：" + u);
+        // if (u != null) {
+        //   if(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()).equals(u.getPassword())){
+        /*user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));*/
+        /*} else {
 
-        return new ModelAndView("redirect:/");
+        }*/
+/*        if (user.getPassword() != null) {
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        } else {
+            user.setPassword(u.getPassword());
+        }*/
+        user.setUpdateTime(new Date());
+        userService.dynamicStyUdp(user);
+
+//        }
+
+        return new ModelAndView("student/student");
     }
 
     /*
