@@ -70,9 +70,18 @@ public class MyMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
+
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            registry.addResourceHandler("/image/**").addResourceLocations("file:D:/photo/");
+        } else {
+            registry.addResourceHandler("/image/**").addResourceLocations("file:/opt/images/");
+        }
         //文件磁盘图片url 映射
         //配置server虚拟路径，handler为前台访问的目录，locations为files相对应的本地路径
-        registry.addResourceHandler("/image/**").addResourceLocations("file:D:/photo/");
+        //registry.addResourceHandler("/image/**").addResourceLocations("file:D:/photo/");
         WebMvcConfigurer.super.addResourceHandlers(registry);
+
+
     }
 }

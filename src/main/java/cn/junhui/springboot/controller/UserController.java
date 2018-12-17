@@ -19,10 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 军辉
@@ -336,14 +333,18 @@ public class UserController {
     /*
     修改账号资料
      */
-    @PostMapping("/account")
+  /*  @PostMapping("/account")
     public ModelAndView updateAccount(User user, MultipartFile photoFile) {
         User u = findbyid(user.getRegisterId());
         System.out.println(photoFile);
         if (photoFile != null) {
-            String path = "D:\\photo\\" + photoFile.getOriginalFilename();
-
-            //System.out.println("photo: " + photoFile.getOriginalFilename());
+            String path = "";
+            String os = System.getProperty("os.name");
+            if (os.toLowerCase().startsWith("win")) {
+                path = "D:\\photo\\" + photoFile.getOriginalFilename();
+            } else {
+                path = "file:/usr/java/image/" + photoFile.getOriginalFilename();
+            }
             user.setPhoto(photoFile.getOriginalFilename());
             File file = new File(path);
             try {
@@ -354,24 +355,45 @@ public class UserController {
         }
         System.out.println("需要修改的：" + user);
         System.out.println(" 原本的：" + u);
-        // if (u != null) {
-        //   if(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()).equals(u.getPassword())){
-        /*user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));*/
-        /*} else {
 
-        }*/
-/*        if (user.getPassword() != null) {
-            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-        } else {
-            user.setPassword(u.getPassword());
-        }*/
         user.setUpdateTime(new Date());
         userService.dynamicStyUdp(user);
 
-//        }
+        return new ModelAndView("student/student");
+    }*/
+
+    @PostMapping("/account")
+    public ModelAndView updateAccount(User user, MultipartFile photoFile) {
+        User u = findbyid(user.getRegisterId());
+        System.out.println(photoFile);
+
+        if (photoFile != null) {
+            String path = "";
+            String os = System.getProperty("os.name");
+            if (os.toLowerCase().startsWith("win")) {
+                path = "D:\\photo\\";
+            } else {
+//                path = "/usr/java/image/";
+                path = "/opt/images/";
+            }
+            user.setPhoto(photoFile.getOriginalFilename());
+            File file = new File(path,Objects.requireNonNull(photoFile.getOriginalFilename()));
+            try {
+                photoFile.transferTo(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("需要修改的：" + user);
+        System.out.println(" 原本的：" + u);
+
+        user.setUpdateTime(new Date());
+        userService.dynamicStyUdp(user);
 
         return new ModelAndView("student/student");
     }
+
 
     /*
     退出登录
